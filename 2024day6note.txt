@@ -1,0 +1,47 @@
+def get_possible_loop_count(map, nextDir, rangeLow, rangeHigh, current):
+  loopCount = 0
+  possibleLoopLoc = [key for key in loopCrateCoord[nextDir].keys() if rangeLow <= key <= rangeHigh]
+  
+  if possibleLoopLoc:
+    match nextDir:
+      case ">":
+        for checkCrateRepeat in possibleLoopLoc:
+          if not map[checkCrateRepeat - 1, current] == "X":
+            crateRepeatList = [coord[1] for coord in cratesCoord if coord[0] == checkCrateRepeat and coord[1] > current]
+            if crateRepeatList:
+              closestRepeat = min(crateRepeatList)
+
+              if closestRepeat in loopCrateCoord[nextDir][checkCrateRepeat]:
+                loopCount += 1
+
+      case "v":
+        for checkCrateRepeat in possibleLoopLoc:
+          if not map[current, checkCrateRepeat + 1] == "X":
+            crateRepeatList = [coord[0] for coord in cratesCoord if coord[1] == checkCrateRepeat and coord[0] > current]
+            if crateRepeatList:
+              closestRepeat = min(crateRepeatList)
+
+              if closestRepeat in loopCrateCoord[nextDir][checkCrateRepeat]:
+                loopCount += 1
+
+      case "<":
+        for checkCrateRepeat in possibleLoopLoc:
+          if not map[checkCrateRepeat + 1, current] == "X":
+            crateRepeatList = [coord[1] for coord in cratesCoord if coord[0] == checkCrateRepeat and coord[1] < current]
+            if crateRepeatList:
+              closestRepeat = max(crateRepeatList)
+
+              if closestRepeat in loopCrateCoord[nextDir][checkCrateRepeat]:
+                loopCount += 1
+
+      case "^":
+        for checkCrateRepeat in possibleLoopLoc:
+          if not map[current, checkCrateRepeat - 1] == "X":
+            crateRepeatList = [coord[0] for coord in cratesCoord if coord[1] == checkCrateRepeat and coord[0] < current]
+            if crateRepeatList:
+              closestRepeat = max(crateRepeatList)
+
+              if closestRepeat in loopCrateCoord[nextDir][checkCrateRepeat]:
+                loopCount += 1
+
+  return loopCount
