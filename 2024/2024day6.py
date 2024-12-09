@@ -18,7 +18,6 @@ def get_distinct_position_count(map, guardCoord, guardDir, checkLoop = False):
   loopCount = 0
 
   while not guardLeft:
-    nextDir = dirList[(dirIndex + 1) % len(dirList)]
     loopCrateDir = dirList[(dirIndex + 3) % len(dirList)]
 
     loopCrateList = []
