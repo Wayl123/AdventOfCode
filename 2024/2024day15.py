@@ -101,8 +101,6 @@ def read_map(inputMap):
     if ele == "[":
       box2CoordSum += (idx[0] * 100) + idx[1]
 
-  print(map2AsArray)
-
   return boxCoordSum, box2CoordSum
 
 inputFilePath = os.path.dirname(__file__) + "\\input\\2024day15input.txt"
