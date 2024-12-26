@@ -4,10 +4,9 @@ from collections import deque
 import matplotlib.pyplot as plt
 
 visitedMinGridCost = {}
-minScorePath = (float("inf"), set())
 
 def find_path_min_score(mapArray, startcoord, startDir, goal):
-  global visitedMinGridCost, minPathCoord
+  global visitedMinGridCost
   
   openList = deque([])
   openList.append((startcoord, startDir, 0))
@@ -56,6 +55,26 @@ def find_path_min_score(mapArray, startcoord, startDir, goal):
 
         if tuple(nextCoord) != goal:
           openList.append((tuple(nextCoord), dir, tempScore))
+
+def trace_path(mapArrayShape, goal):
+  minScore = min(next(zip(*visitedMinGridCost[goal])))
+  minList = deque([path for path in visitedMinGridCost[goal] if path[0] == minScore])
+
+  minPathCoords = {goal}
+
+  while len(minList) > 0:
+    checkPath = minList.popleft()
+    if checkPath[2]:
+      minPathCoords.add(checkPath[2])
+      minPathNext = [path for path in visitedMinGridCost[checkPath[2]] if path[1] == checkPath[3]]
+      minPathNextMinScore = min(next(zip(*minPathNext)))
+      minList.extend([path for path in minPathNext if path[0] == minPathNextMinScore])
+
+  for coord in minPathCoords:
+    plt.plot(coord[1], mapArrayShape[0] - coord[0], 'o')
+  plt.show()
+
+  return minScore, len(minPathCoords)
           
 def read_map(inputMap):
   rows = inputMap.split("\n")
@@ -79,24 +98,7 @@ def read_map(inputMap):
   find_path_min_score(mapAsArray, startCoord, startDir, endCoord)
 
   if endCoord in visitedMinGridCost:
-    minScore = min(next(zip(*visitedMinGridCost[endCoord])))
-    minList = deque([path for path in visitedMinGridCost[endCoord] if path[0] == minScore])
-
-    minPathCoords = {endCoord}
-
-    while len(minList) > 0:
-      checkPath = minList.popleft()
-      if checkPath[2]:
-        minPathCoords.add(checkPath[2])
-        minPathNext = [path for path in visitedMinGridCost[checkPath[2]] if path[1] == checkPath[3]]
-        minPathNextMinScore = min(next(zip(*minPathNext)))
-        minList.extend([path for path in minPathNext if path[0] == minPathNextMinScore])
-
-    for coord in minPathCoords:
-      plt.plot(coord[1], mapAsArray.shape[0] - coord[0], 'o')
-    plt.show()
-
-    return minScore, len(minPathCoords)
+    return trace_path(mapAsArray.shape, endCoord)
   else:
     return "Solution not found"
 
