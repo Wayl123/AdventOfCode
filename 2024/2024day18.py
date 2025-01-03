@@ -34,7 +34,7 @@ def find_path_min_score(start, goal, closed):
       nextCoord[0] = coord[0] + dir[0]
       nextCoord[1] = coord[1] + dir[1]
 
-      if not tuple(nextCoord) in closed and is_in_grid(nextCoord):
+      if is_in_grid(nextCoord) and not tuple(nextCoord) in closed:
         score = visitedGrid[tuple(coord)][1] + 1
         heuristic = calculate_h_value(tuple(nextCoord), goal)
         totalScore = score + heuristic
@@ -85,7 +85,7 @@ def read_map(input):
 
   blockedCoords = input.split("\n")
 
-  for index, blockedCoord in enumerate(blockedCoords):
+  for blockedCoord in blockedCoords:
     coord = list(map(int, blockedCoord.split(",")))
     closedGrid.append((coord[1], coord[0]))
 

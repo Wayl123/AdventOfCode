@@ -1,0 +1,28 @@
+def solve_sequence(seq, isNumericKeypad = False):
+  outSeq = ""
+
+  if isNumericKeypad:
+    keypad = numericKeypad
+    pos = [3, 2]
+  else:
+    keypad = directionalKeypad
+    pos = [0, 2]
+
+  for char in seq:
+    match char:
+      case "^":
+        pos[0] -= 1
+      case ">":
+        pos[1] += 1
+      case "v":
+        pos[0] += 1
+      case "<":
+        pos[1] -= 1
+      case "A":
+        outSeq += keypad[tuple(pos)]
+
+  return outSeq
+
+# Seq pair that are faster than their counter pair
+# <^ <v v>
+# ^> are equal though
