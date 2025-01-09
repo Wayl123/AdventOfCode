@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import re
-from functools import cache, lru_cache
+from functools import cache
 
 numericKeypad = np.array([["7", "8", "9"],
                           ["4", "5", "6"],
