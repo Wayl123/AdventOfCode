@@ -1,8 +1,9 @@
 import os
 import numpy as np
+from collections import deque
 
 wires = {}
-cmdQueue = []
+cmdQueue = deque([])
 
 operators = {
   "AND": lambda x, y: x & y,
@@ -21,7 +22,7 @@ def check_if_output_waiting(output):
 
   if output in wires:
     if not ("updated" in wires[output] and wires[output]["updated"]) and "operation" in wires[output]:
-      cmdQueue += list(wires[output]["operation"])
+      cmdQueue.extend(wires[output]["operation"])
   else:
     wires[output] = {}
     wires[output]["updated"] = False
@@ -43,7 +44,7 @@ def execute_command_queue():
   global cmdQueue
 
   while cmdQueue:
-    execute_instruction(cmdQueue.pop(0), True)
+    execute_instruction(cmdQueue.popleft(), True)
 
 def execute_instruction(cmd, repeatFlag = False):
   global wires
@@ -105,7 +106,7 @@ def read_instruction(input):
     if ("endpoint" in wires[w] and wires[w]["endpoint"]) and ("updated" in wires[w] and not wires[w]["updated"]):
       execute_instruction(str(wires[w]["value"]) + " -> " + w)
 
-  return(result, wires["a"]["value"])
+  return result, wires["a"]["value"]
 
 inputFilePath = os.path.dirname(__file__) + "\\input\\2015day7input.txt"
 with open(inputFilePath, "r") as inputFile:
